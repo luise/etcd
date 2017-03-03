@@ -1,16 +1,20 @@
 function Etcd(n) {
     var refContainer = new Container("quay.io/coreos/etcd:v3.0.2");
     this.etcd = new Service("etcd", refContainer.replicate(n));
-    var children = this.etcd.children();
+
+    this.etcd.containers.forEach(function(c, i) {
+        c.setHostname("etcd" + i);
+    });
 
     var initialCluster = [];
-    children.forEach(function(host) {
+    this.etcd.containers.forEach(function(c) {
+        var host = c.getHostname();
         initialCluster.push(host + "=http://" + host + ":2380");
     });
     var initialClusterStr = initialCluster.join(",");
 
-    this.etcd.containers.forEach(function(c, i) {
-        var host = children[i];
+    this.etcd.containers.forEach(function(c) {
+        var host = c.getHostname();
         c.setEnv("ETCD_NAME", host);
         c.setEnv("ETCD_LISTEN_PEER_URLS", "http://" + host + ":2380");
         c.setEnv("ETCD_LISTEN_CLIENT_URLS", "http://0.0.0.0:2379");
