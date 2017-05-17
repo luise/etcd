@@ -1,3 +1,5 @@
+const {Container, Service, PortRange} = require("@quilt/quilt");
+
 function Etcd(n) {
     var refContainer = new Container("quay.io/coreos/etcd:v3.0.2");
     this.etcd = new Service("etcd", refContainer.replicate(n));

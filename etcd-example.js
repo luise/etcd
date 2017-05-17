@@ -1,4 +1,5 @@
-var etcd = require("github.com/quilt/etcd");
+const {createDeployment, githubKeys, Machine} = require("@quilt/quilt");
+var etcd = require("./etcd.js");
 
 var nWorker = 3;
 
