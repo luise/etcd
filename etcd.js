@@ -25,7 +25,7 @@ function Etcd(n) {
     c.setEnv('ETCD_INITIAL_CLUSTER_STATE', 'new');
     c.setEnv('ETCD_ADVERTISE_CLIENT_URLS', `http://${host}:2379`);
   });
-  this.etcd.connect(new PortRange(1000, 65535), this.etcd);
+  this.etcd.allowFrom(this.etcd, new PortRange(1000, 65535));
 
   this.deploy = function deploy(deployment) {
     deployment.deploy(this.etcd);
