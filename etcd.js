@@ -1,8 +1,10 @@
 const { Container, PortRange, allow } = require('@quilt/quilt');
 
 function Etcd(n) {
-  const refContainer = new Container('etcd', 'quay.io/coreos/etcd:v3.0.2');
-  this.cluster = refContainer.replicate(n);
+  this.cluster = [];
+  for (let i = 0; i < n; i += 1) {
+    this.cluster.push(new Container('etcd', 'quay.io/coreos/etcd:v3.0.2'));
+  }
 
   const initialCluster = this.cluster.map((c) => {
     const host = c.getHostname();
