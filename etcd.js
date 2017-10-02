@@ -1,18 +1,18 @@
 const { Container, PortRange, allow } = require('@quilt/quilt');
 
 function Etcd(n) {
-  this.cluster = [];
+  this.containers = [];
   for (let i = 0; i < n; i += 1) {
-    this.cluster.push(new Container('etcd', 'quay.io/coreos/etcd:v3.0.2'));
+    this.containers.push(new Container('etcd', 'quay.io/coreos/etcd:v3.0.2'));
   }
 
-  const initialCluster = this.cluster.map((c) => {
+  const initialCluster = this.containers.map((c) => {
     const host = c.getHostname();
     return `${host}=http://${host}:2380`;
   });
   const initialClusterStr = initialCluster.join(',');
 
-  this.cluster.forEach((c) => {
+  this.containers.forEach((c) => {
     const host = c.getHostname();
     c.setEnv('ETCD_NAME', host);
     c.setEnv('ETCD_LISTEN_PEER_URLS', `http://${host}:2380`);
@@ -22,10 +22,10 @@ function Etcd(n) {
     c.setEnv('ETCD_INITIAL_CLUSTER_STATE', 'new');
     c.setEnv('ETCD_ADVERTISE_CLIENT_URLS', `http://${host}:2379`);
   });
-  allow(this.cluster, this.cluster, new PortRange(1000, 65535));
+  allow(this.containers, this.containers, new PortRange(1000, 65535));
 
   this.deploy = function deploy(deployment) {
-    deployment.deploy(this.cluster);
+    deployment.deploy(this.containers);
   };
 }
 
