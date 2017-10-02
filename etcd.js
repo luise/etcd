@@ -25,7 +25,7 @@ function Etcd(n) {
   allow(this.containers, this.containers, new PortRange(1000, 65535));
 
   this.deploy = function deploy(deployment) {
-    deployment.deploy(this.containers);
+    this.containers.forEach(container => container.deploy(deployment));
   };
 }
 

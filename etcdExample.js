@@ -12,4 +12,6 @@ const baseMachine = new Machine({
 
 deployment.deploy(baseMachine.asMaster());
 deployment.deploy(baseMachine.asWorker().replicate(nWorker));
-deployment.deploy(new etcd.Etcd(nWorker));
+
+const etcdApp = new etcd.Etcd(nWorker);
+etcdApp.deploy(deployment);
