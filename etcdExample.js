@@ -1,4 +1,4 @@
-const { createDeployment, githubKeys, Machine } = require('@quilt/quilt');
+const { createDeployment, githubKeys, Machine } = require('kelda');
 const etcd = require('./etcd.js');
 
 const nWorker = 3;

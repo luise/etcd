@@ -1,4 +1,4 @@
-# Etcd for Quilt.js
+# Etcd for Kelda.js
 
-This repository implements an Etcd specification for Quilt.js.  See
-[Quilt](http://quilt.io) for more information.
+This repository implements an Etcd specification for Kelda.js.  See
+[Kelda](http://kelda.io) for more information.
