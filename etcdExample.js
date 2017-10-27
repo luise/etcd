@@ -1,17 +1,13 @@
-const { createDeployment, githubKeys, Machine } = require('kelda');
+const { Infrastructure, githubKeys, Machine } = require('kelda');
 const etcd = require('./etcd.js');
 
 const nWorker = 3;
-
-const deployment = createDeployment({});
 
 const baseMachine = new Machine({
   provider: 'Amazon',
   sshKeys: githubKeys('ejj'), // Replace with your GitHub username.
 });
-
-deployment.deploy(baseMachine.asMaster());
-deployment.deploy(baseMachine.asWorker().replicate(nWorker));
+const infra = new Infrastructure(baseMachine, baseMachine.replicate(nWorker));
 
 const etcdApp = new etcd.Etcd(nWorker);
-etcdApp.deploy(deployment);
+etcdApp.deploy(infra);
