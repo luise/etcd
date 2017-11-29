@@ -1,4 +1,4 @@
-const { Container, PortRange, allow } = require('kelda');
+const { Container, allow } = require('kelda');
 
 function Etcd(n) {
   this.containers = [];
@@ -22,7 +22,14 @@ function Etcd(n) {
     c.setEnv('ETCD_INITIAL_CLUSTER_STATE', 'new');
     c.setEnv('ETCD_ADVERTISE_CLIENT_URLS', `http://${host}:2379`);
   });
-  allow(this.containers, this.containers, new PortRange(1000, 65535));
+
+  // Used by the cluster members to communicate with each other.
+  allow(this.containers, this.containers, 2380);
+
+  // Used for client connections. While not strictly necessary, it's
+  // convenient for the containers in the cluster to be able to create a client
+  // for debugging.
+  allow(this.containers, this.containers, 2379);
 
   this.deploy = function deploy(deployment) {
     this.containers.forEach(container => container.deploy(deployment));
