@@ -1,4 +1,4 @@
-const { Container, allow } = require('kelda');
+const { Container, allowTraffic } = require('kelda');
 
 function Etcd(n) {
   this.containers = [];
@@ -24,12 +24,12 @@ function Etcd(n) {
   });
 
   // Used by the cluster members to communicate with each other.
-  allow(this.containers, this.containers, 2380);
+  allowTraffic(this.containers, this.containers, 2380);
 
   // Used for client connections. While not strictly necessary, it's
   // convenient for the containers in the cluster to be able to create a client
   // for debugging.
-  allow(this.containers, this.containers, 2379);
+  allowTraffic(this.containers, this.containers, 2379);
 
   this.deploy = function deploy(deployment) {
     this.containers.forEach(container => container.deploy(deployment));
