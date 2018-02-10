@@ -3,7 +3,7 @@ const { Container, allowTraffic } = require('kelda');
 function Etcd(n) {
   this.containers = [];
   for (let i = 0; i < n; i += 1) {
-    this.containers.push(new Container('etcd', 'quay.io/coreos/etcd:v3.0.2'));
+    this.containers.push(new Container('etcd', 'quay.io/coreos/etcd:v3.3'));
   }
 
   const initialCluster = this.containers.map((c) => {
@@ -15,7 +15,7 @@ function Etcd(n) {
   this.containers.forEach((c) => {
     const host = c.getHostname();
     c.setEnv('ETCD_NAME', host);
-    c.setEnv('ETCD_LISTEN_PEER_URLS', `http://${host}:2380`);
+    c.setEnv('ETCD_LISTEN_PEER_URLS', 'http://0.0.0.0:2380');
     c.setEnv('ETCD_LISTEN_CLIENT_URLS', 'http://0.0.0.0:2379');
     c.setEnv('ETCD_INITIAL_ADVERTISE_PEER_URLS', `http://${host}:2380`);
     c.setEnv('ETCD_INITIAL_CLUSTER', initialClusterStr);
