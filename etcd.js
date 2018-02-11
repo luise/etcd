@@ -3,7 +3,10 @@ const { Container, allowTraffic } = require('kelda');
 function Etcd(n) {
   this.containers = [];
   for (let i = 0; i < n; i += 1) {
-    this.containers.push(new Container('etcd', 'quay.io/coreos/etcd:v3.3'));
+    this.containers.push(new Container({
+      name: 'etcd',
+      image: 'quay.io/coreos/etcd:v3.3',
+    }));
   }
 
   const initialCluster = this.containers.map((c) => {
