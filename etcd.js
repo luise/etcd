@@ -17,13 +17,15 @@ function Etcd(n) {
 
   this.containers.forEach((c) => {
     const host = c.getHostname();
-    c.setEnv('ETCD_NAME', host);
-    c.setEnv('ETCD_LISTEN_PEER_URLS', 'http://0.0.0.0:2380');
-    c.setEnv('ETCD_LISTEN_CLIENT_URLS', 'http://0.0.0.0:2379');
-    c.setEnv('ETCD_INITIAL_ADVERTISE_PEER_URLS', `http://${host}:2380`);
-    c.setEnv('ETCD_INITIAL_CLUSTER', initialClusterStr);
-    c.setEnv('ETCD_INITIAL_CLUSTER_STATE', 'new');
-    c.setEnv('ETCD_ADVERTISE_CLIENT_URLS', `http://${host}:2379`);
+    /* eslint-disable no-param-reassign */
+    c.env.ETCD_NAME = host;
+    c.env.ETCD_LISTEN_PEER_URLS = 'http://0.0.0.0:2380';
+    c.env.ETCD_LISTEN_CLIENT_URLS = 'http://0.0.0.0:2379';
+    c.env.ETCD_INITIAL_ADVERTISE_PEER_URLS = `http://${host}:2380`;
+    c.env.ETCD_INITIAL_CLUSTER = initialClusterStr;
+    c.env.ETCD_INITIAL_CLUSTER_STATE = 'new';
+    c.env.ETCD_ADVERTISE_CLIENT_URLS = `http://${host}:2379`;
+    /* eslint-enable no-param-reassign */
   });
 
   // Used by the cluster members to communicate with each other.
